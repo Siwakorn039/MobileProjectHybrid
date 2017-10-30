@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+  <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="index.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
+  
+  <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+  
+  <script type="text/javascript" src="index.js"></script>
+  <script type="text/javascript" src="index2.js"></script>
+  
+  <style>
+    #new .page__background { background-color: rgba(0, 0, 0, 0);}
+    #map {
+        height: 400px;
+        width: 100%;
+       }
+  </style>
+
+</head>
+<script id="template" type="x-tmpl-mustache">
+  <div id="posts{{id}}">
+    <ons-card class="post">
+      <ons-list-item class="post_title">
+        <div class="left">
+          <i class="ion-android-person" style="font-size:50px"></i>
+        </div>
+        <div class="center">
+          <div class="list-item__title"><b>NAME</b></div>
+          <div class="list-item__subtitle" style="font-size: 12px">
+              {{name}}
+            </div>
+        </div>
+      </ons-list-item>
+
+      <div style="text-align: center; position: relative;" ondblclick="like(1)">
+          <ons-icon size="150px" id="post-like-1" class="post-like" icon="ion-ios-heart"></ons-icon>
+          <img class="post-image" src="{{photo}}">        
+        </div>
+
+      <ons-list-item class="post-button-bar" modifier="nodivider">
+        <div class="center" style="padding-top: 0px">
+          <ons-button class="post-button" modifier="quiet" >
+            <ons-icon id="button-post-like-1" icon="ion-ios-heart-outline"></ons-icon>
+          </ons-button>
+
+        </div>
+        <div class="right corner-button bookmark">
+        </div>
+      </ons-list-item>
+
+      <div class="post-caption"><b>title</b> 
+        {{title}}
+      </div>
+      <div class="post-caption"><b>Description</b> 
+        {{cription}}
+      </div>
+    </input>
+      <div class="post-time">1 HOUR AGO</div>
+    </ons-card>
+
+  </div>
+  
+</script>
+<body>
+    
+
+  <ons-page>
+    <ons-toolbar>
+      <div class="center">PSU Pin</div>
+      <div class="right">
+        <ons-toolbar-button>
+          <ons-icon icon="ion-navicon, material:md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+    </ons-toolbar>
+
+    <ons-tabbar swipeable position="auto">
+      <ons-tab page="time.html" id="timetab" label="Timeline" icon="fa-clock-o" badge="7" active>
+      </ons-tab>
+      <ons-tab page="new.html" label="New Pin" icon="fa-thumb-tack" active-icon="fa-thumb-tack">
+      </ons-tab>
+      <ons-tab page="map.html" label="Pin Map" icon="fa-globe" active-icon="fa-globe">
+      </ons-tab>
+    </ons-tabbar>
+  </ons-page>
+
+  <template id="time.html">
+    <ons-page id="time">
+      <div id="pins">
+
+        
+
+
+      </div>
+    </ons-page>
+  </template>
+
+ 
+
+  <template id="new.html">
+    <ons-page id="new">
+    
+        <p style="text-align: center;">
+            <ons-icon icon="fa-map-marker"></ons-icon>
+            Add New Pin
+          </p>
+          <section style="margin: 8px; background-color:#FFFFFF;">
+            <img class="preview-image" id="preview" src="images/camera.png">
+          </section>
+
+      
+     
+
+     
+      <section style="padding: 8px;">
+        <ons-button modifier="large" id="takephoto">Take a Photo</ons-button>
+      </section>
+
+
+
+      
+      <section style="padding: 8px;text-align: center;">
+        <ons-input style="width:100%;" input-id="photo" id="photo" modifier="underbar" placeholder="URL Image"></ons-input>
+      </section>
+      <section style="padding: 8px;text-align: center;">
+        <ons-input style="width:100%;" input-id="desc" id="name" modifier="underbar" placeholder="Name"></ons-input>
+      </section>
+
+      <section style="padding: 8px;text-align: center;">
+        <ons-input style="width:100%;" input-id="desc" id="title" modifier="underbar" placeholder="caption"></ons-input>
+      </section>
+
+      <section style="padding: 8px;text-align: center;">
+        <ons-input style="width:100%;" input-id="desc" id="cription" modifier="underbar" placeholder="Share what's happen"></ons-input>
+      </section>
+      <section style="padding: 8px;">
+        <ons-button modifier="large" id="postpin">Submit</ons-button>
+      </section>
+
+      <section style="padding: 8px;text-align: center;">
+        <div style="width:100%;height:200px;" id="map_canvas"></div>
+      </section>
+    </ons-page>
+  </template>
+
+
+
+  <template id="map.html">
+    <ons-page id="map">
+      <p style="text-align: center;">
+
+          PSU Pins Map.
+
+          <h3>My Google Maps Demo</h3>
+          <div id="map"></div>
+          <script>
+            function initMap() {
+              var uluru = {lat: 7.89347, lng: 98.35349};
+              var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 15,
+                center: uluru
+              });
+              var marker = new google.maps.Marker({
+                position: uluru,
+                map: map
+              });
+            }
+          </script>
+          <script async defer
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSu3FM2YaAN9JXw_TZ-szp2btuGj_Znts&callback=initMap">
+          </script>
+
+        
+      </p>
+      <section style="padding: 8px;text-align: center;">
+        <div style="width:100%;height:300px;" id="map_canvas"></div>
+      </section>
+    </ons-page>
+  </template>
+
+</body>
+
+</html>
